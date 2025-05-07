@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,16 +8,21 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Coroutine moveCoroutine;
-    public PlayerInput input;
-    public float moveSpeed;
-    public float accelerationTime = 3f;
-    public float decelerationTime = 3f;
-    public float moveRotarionAngle = 30;
-    public float halfWidth;
-    public float halfHeight;
-    public GameObject Projectile;
-    public Transform muzzle;
-    public float fireInterval = 0.3f;
+    [SerializeField] PlayerInput input;
+    [SerializeField] float moveSpeed;
+    [SerializeField] float accelerationTime = 3f;
+    [SerializeField] float decelerationTime = 3f;
+    [SerializeField] float moveRotarionAngle = 30;
+    [SerializeField] float halfWidth;
+    [SerializeField] float halfHeight;
+    [SerializeField] GameObject Projectile1;
+    [SerializeField] GameObject Projectile2;
+    [SerializeField] GameObject Projectile3;
+    [SerializeField, Range(0, 2)] int weaponPower = 0;
+    [SerializeField] Transform muzzleMiddle;
+    [SerializeField] Transform muzzleLeft;
+    [SerializeField] Transform muzzleRight;
+    [SerializeField] float fireInterval = 0.3f;
     WaitForSeconds waitFireInterval;
 
     private void OnEnable()
@@ -104,8 +110,41 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
-            Instantiate(Projectile, muzzle.position, Quaternion.identity);
+            //switch (weaponPower)
+            //{
+            //    case 0:
+            //        Instantiate(Projectile1, muzzleMiddle.position, Quaternion.identity);
+            //        break;
+            //    case 1:
+            //        Instantiate(Projectile2, muzzleRight.position, Quaternion.identity);
+            //        Instantiate(Projectile3, muzzleLeft.position, Quaternion.identity);
+            //        break;
+            //    case 2:
+            //        Instantiate(Projectile2, muzzleRight.position, Quaternion.identity);
+            //        Instantiate(Projectile1, muzzleMiddle.position, Quaternion.identity);
+            //        Instantiate(Projectile3, muzzleLeft.position, Quaternion.identity);
+            //        break;
+            //    default:
+            //        break;
+            //}
 
+            switch (weaponPower)
+            {
+                case 0:
+                    PoolManager.Release(Projectile1, muzzleMiddle.position);
+                    break;
+                case 1:
+                    PoolManager.Release(Projectile2, muzzleRight.position);
+                    PoolManager.Release(Projectile3, muzzleLeft.position);
+                    break;
+                case 2:
+                    PoolManager.Release(Projectile1, muzzleMiddle.position);
+                    PoolManager.Release(Projectile2, muzzleRight.position);
+                    PoolManager.Release(Projectile3, muzzleLeft.position);
+                    break;
+                default:
+                    break;
+            }
             yield return waitFireInterval;
         }
     }
