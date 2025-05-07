@@ -6,6 +6,14 @@ public class Singleton<T> : MonoBehaviour where T : Component
 
     protected virtual void Awake()
     {
-        instance = this as T;
+        if (instance == null)
+        {
+            instance = this as T;
+        }
+        else if (instance != this)
+        {
+            //Debug.LogWarning($"重复的单例实例 {typeof(T)}，销毁 {gameObject.name}");
+            Destroy(gameObject);
+        }
     }
 }

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float moveSpeed;
+    [SerializeField] float moveSpeed;
 
-    public Vector2 moveDirection;
+    [SerializeField] protected Vector2 moveDirection;
 
-
-    private void OnEnable()
+    protected GameObject target;
+    protected virtual void OnEnable()
     {
         StartCoroutine(MoveDirectly());
     }
 
-    IEnumerator MoveDirectly()
+    protected virtual IEnumerator MoveDirectly()
     {
         while (gameObject.activeSelf)
         {

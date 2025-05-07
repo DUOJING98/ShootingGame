@@ -4,17 +4,24 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Chara
 {
+    [SerializeField] bool regenerateHealth = true;
+    [SerializeField] float healthRegenerateTime;
+    [SerializeField,Range(0f,1f)] float healthRegeneratePercent;
     private Rigidbody2D rb;
     private Coroutine moveCoroutine;
+    private Coroutine healthRegenerateCoroutine;
+    [Header("----------INPUT------------")]
     [SerializeField] PlayerInput input;
+    [Header("----------MOVE------------")]
     [SerializeField] float moveSpeed;
     [SerializeField] float accelerationTime = 3f;
     [SerializeField] float decelerationTime = 3f;
     [SerializeField] float moveRotarionAngle = 30;
     [SerializeField] float halfWidth;
     [SerializeField] float halfHeight;
+    [Header("----------FIRE------------")]
     [SerializeField] GameObject Projectile1;
     [SerializeField] GameObject Projectile2;
     [SerializeField] GameObject Projectile3;
@@ -24,9 +31,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform muzzleRight;
     [SerializeField] float fireInterval = 0.3f;
     WaitForSeconds waitFireInterval;
+    WaitForSeconds waitHealthRegenerateTime;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         input.onMove += Move;
         input.onStopMove += StopMove;
         input.onFire += Fire;
@@ -50,8 +59,27 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 0;
         input.EnablePlayerInput();
         waitFireInterval = new WaitForSeconds(fireInterval);
+        waitHealthRegenerateTime = new WaitForSeconds(healthRegenerateTime);
+
     }
 
+
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+        if (gameObject.activeSelf)
+        {
+            if (regenerateHealth)
+            {
+                if (healthRegenerateCoroutine != null)
+                {
+                    StopCoroutine(healthRegenerateCoroutine);
+                }
+                healthRegenerateCoroutine = StartCoroutine(HealthRegenerateCoroutine(waitHealthRegenerateTime, healthRegeneratePercent));
+            }
+        }
+
+    }
     #region MOVE
     private void Move(Vector2 moveInput)
     {
