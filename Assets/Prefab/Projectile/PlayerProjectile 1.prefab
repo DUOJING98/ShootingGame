@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6976638828739633134}
   - component: {fileID: 986630658616702204}
   - component: {fileID: 9014739838872016752}
-  m_Layer: 0
+  - component: {fileID: -1469385526424702760}
+  m_Layer: 8
   m_Name: PlayerProjectile 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +33,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9147183472012158353}
-  - {fileID: 6451519207591623857}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &986630658616702204
@@ -47,6 +47,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4a7f99dca3924499891b3a33f2dc33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 1
+  hitVFX: {fileID: 5060298685065931927, guid: 6775c68a79b34db4fa2fd4db2a4cdf74, type: 3}
+  hitSFX:
+  - audioClip: {fileID: 8300000, guid: 75adfe9a619833445a701305b983e548, type: 3}
+    volume: 0.3
+  - audioClip: {fileID: 8300000, guid: e11a5a019377fbd4c81caa0adcb4c236, type: 3}
+    volume: 0.3
+  - audioClip: {fileID: 8300000, guid: bb6cdd13aeb95f743847b1cd460889bc, type: 3}
+    volume: 0.3
   moveSpeed: 15
   moveDirection: {x: 0, y: 1}
 --- !u!114 &9014739838872016752
@@ -63,6 +72,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyGameObject: 0
   lifeTime: 3
+--- !u!70 &-1469385526424702760
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198995235197539903}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!1 &4285465258438342940
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,7 +120,7 @@ GameObject:
   - component: {fileID: 9147183472012158353}
   - component: {fileID: 1994595351764915671}
   - component: {fileID: 6955189260865834276}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +139,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6451519207591623857}
   m_Father: {fileID: 6976638828739633134}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &1994595351764915671
@@ -4875,7 +4922,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 0
+  m_RenderAlignment: 2
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_EnableGPUInstancing: 1
@@ -4906,7 +4953,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6451519207591623857}
   - component: {fileID: 7557858997728982382}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4921,12 +4968,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4435596147848721465}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6976638828739633134}
+  m_Father: {fileID: 9147183472012158353}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &7557858997728982382
 TrailRenderer:

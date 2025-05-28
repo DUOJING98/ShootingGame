@@ -8,11 +8,13 @@ public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
 {
     InputSystem_Actions inputActions;
 
-    public event UnityAction<Vector2> onMove;
-    public event UnityAction onStopMove;
+    public event UnityAction<Vector2> onMove = delegate { };
+    public event UnityAction onStopMove = delegate { };
 
-    public event UnityAction onFire;
-    public event UnityAction onStopFire;
+    public event UnityAction onFire = delegate { };
+    public event UnityAction onStopFire = delegate { };
+
+    public event UnityAction onDodge = delegate { };
 
     private void OnEnable()
     {
@@ -61,6 +63,10 @@ public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            onDodge.Invoke();
+        }
     }
 
     public void OnLook(InputAction.CallbackContext context)
@@ -74,7 +80,7 @@ public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
             if (onMove != null)
                 onMove.Invoke(context.ReadValue<Vector2>());
         }
-        if(context.phase == InputActionPhase.Canceled)
+        if (context.phase == InputActionPhase.Canceled)
         {
             if (onStopMove != null)
                 onStopMove.Invoke();

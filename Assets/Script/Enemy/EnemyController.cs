@@ -3,20 +3,23 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-
-    [SerializeField] GameObject[] projectiles;
-    [SerializeField] Transform muzzle;
+    [Header("-----MOVE-----")]
     [SerializeField] float paddingX;
     [SerializeField] float paddingY;
     [SerializeField] float moveSpeed;
     [SerializeField] float moveRotationAngle;
+
+    [Header("-----FIRE-----")]
+    [SerializeField] GameObject[] projectiles;
+    [SerializeField] AudioData[] projectilesSFX;
+    [SerializeField] Transform muzzle;
     [SerializeField] float minFireInterval;
     [SerializeField] float MaxFireInterval;
 
-    private void Start()
+    private void OnEnable()
     {
-        StartCoroutine(RandomMoveCoroutine());
-        StartCoroutine(RandomFireCoroutine());
+        StartCoroutine(nameof(RandomMoveCoroutine));
+        StartCoroutine(nameof(RandomFireCoroutine));
     }
 
     private void OnDisable()
@@ -58,6 +61,7 @@ public class EnemyController : MonoBehaviour
             {
                 PoolManager.Release(projectile,muzzle.position);
             }
+            AudioManager.instance.PlayRandomSFX(projectilesSFX);
         }
     }
 }

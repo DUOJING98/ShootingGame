@@ -3,21 +3,34 @@ using UnityEngine;
 
 public class Enemy_Projectile_Aming : Projectile
 {
-    protected override void OnEnable()
+    private void Awake()
     {
         target = GameObject.FindGameObjectWithTag("Player");
+    }
 
-        if (target != null)
+    protected override void OnEnable()
+    {
+        //Debug.DrawLine(transform.position, transform.position + (Vector3)(moveDirection * 2f), Color.red, 1f);
+        StartCoroutine(MoveDirectlyCoroutine());
+        base.OnEnable();
+    }
+
+    IEnumerator MoveDirectlyCoroutine()
+    {
+        yield return null;
+
+        if (target.activeSelf)
         {
             moveDirection = (target.transform.position - transform.position).normalized;
-            //Debug.Log($"追踪子弹方向：{moveDirection}, 玩家位置：{target.transform.position}, 子弹位置：{transform.position}");
-        }
-        else
-        {
-            Debug.LogError("未找到玩家对象！");
-            moveDirection = Vector2.down;
+            target = GameObject.FindGameObjectWithTag("Player");
+            // Debug.Log($"Target: {target.name}, ActiveSelf: {target.activeSelf}, Position: {target.transform.position}");
+
         }
 
-        StartCoroutine(MoveDirectly());
+        else
+        {
+            //Debug.LogError("未找到玩家对象！");
+            moveDirection = Vector2.down;
+        }
     }
 }

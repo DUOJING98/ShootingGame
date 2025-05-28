@@ -25,8 +25,8 @@ public class ViewPort : Singleton<ViewPort>
     public Vector2 PlayerMoveablePostion(Vector2 pos, float halfWidth, float halfHeight)
     {
         Vector2 postion = Vector2.zero;
-
-        postion.x = Mathf.Clamp(pos.x, minX + halfWidth, maxX - halfWidth);
+        float limitX = Mathf.Min(maxX, 8.0f);
+        postion.x = Mathf.Clamp(pos.x, minX + halfWidth, limitX - halfWidth);
         postion.y = Mathf.Clamp(pos.y, minY + halfHeight, maxY - halfHeight);
         return postion;
     }
@@ -34,16 +34,18 @@ public class ViewPort : Singleton<ViewPort>
     public Vector2 RandomEnemySpawnPosition(float halfWidth, float halfHeight)
     {
         Vector2 pos = Vector2.zero;
+        float limitX = Mathf.Min(maxX, 8.0f);
         pos.y = maxY + halfHeight;
-        pos.x = Random.Range(minX + halfWidth, maxX - halfWidth);
+        pos.x = Random.Range(minX + halfWidth, limitX - halfWidth);
         return pos;
     }
 
     public Vector2 RandomTopHalfPosition(float halfWidth, float halfHeight)
     {
         Vector2 pos = Vector2.zero;
+        float limitX = Mathf.Min(maxX, 8.0f);
         pos.y = Random.Range(middleY, maxY - halfHeight);
-        pos.x = Random.Range(minX + halfWidth, maxX - halfWidth);
+        pos.x = Random.Range(minX + halfWidth, limitX - halfWidth);
         return pos;
     }
 
