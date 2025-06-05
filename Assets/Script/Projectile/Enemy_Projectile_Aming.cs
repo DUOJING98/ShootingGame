@@ -19,17 +19,18 @@ public class Enemy_Projectile_Aming : Projectile
     {
         yield return null;
 
-        if (target.activeSelf)
+        if (target == null)
+        {
+            target = GameObject.FindGameObjectWithTag("Player");
+        }
+
+        if (target != null && target.activeSelf)
         {
             moveDirection = (target.transform.position - transform.position).normalized;
-            target = GameObject.FindGameObjectWithTag("Player");
-            // Debug.Log($"Target: {target.name}, ActiveSelf: {target.activeSelf}, Position: {target.transform.position}");
-
         }
 
         else
         {
-            //Debug.LogError("未找到玩家对象！");
             moveDirection = Vector2.down;
         }
     }

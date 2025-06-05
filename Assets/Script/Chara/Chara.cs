@@ -4,8 +4,8 @@ using UnityEngine;
 public class Chara : MonoBehaviour
 {
     [Header("-----DEATH--------")]
-    [SerializeField] GameObject deathVFX;
-    [SerializeField] AudioData[] deathSFX;
+    [SerializeField] protected GameObject deathVFX;
+    [SerializeField] protected AudioData[] deathSFX;
     [Header("-----HEALTH--------")]
     [SerializeField] protected float maxHealth;
     [SerializeField] StatsBar healthBar;
@@ -39,7 +39,7 @@ public class Chara : MonoBehaviour
     public virtual void TakeDamage(float damage)
     {
         Health -= damage;
-        if (showHealthBar && gameObject.activeSelf)
+        if (showHealthBar && gameObject.activeSelf && healthBar.gameObject.activeInHierarchy)
         {
             healthBar.UpdateStats(Health, maxHealth);
         }
@@ -52,6 +52,10 @@ public class Chara : MonoBehaviour
     public virtual void Die()
     {
         Health = 0f;
+        if (showHealthBar)
+        {
+            HideHealthBar(); 
+        }
         AudioManager.instance.PlayRandomSFX(deathSFX);
         PoolManager.Release(deathVFX, transform.position);
         gameObject.SetActive(false);
@@ -64,7 +68,7 @@ public class Chara : MonoBehaviour
         //Health += value;
         //Health = Mathf.Clamp(Health,0f, maxHealth);
         Health = Mathf.Clamp(Health + value, 0f, maxHealth);
-        if (showHealthBar)
+        if (showHealthBar && healthBar.gameObject.activeInHierarchy)
         {
             healthBar.UpdateStats(Health, maxHealth);
         }

@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyGameObject: 0
-  lifeTime: 3
+  lifeTime: 2
 --- !u!70 &-1469385526424702760
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

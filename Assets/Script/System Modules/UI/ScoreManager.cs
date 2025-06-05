@@ -19,6 +19,10 @@ public class ScoreManager : persistentSingleton<ScoreManager>
         Score.UpdateText(score);
         StartCoroutine(nameof(AddScoreCoroutine));
     }
+    public int GetCurrentScore()
+    {
+        return currentScore;
+    }
 
     IEnumerator AddScoreCoroutine()
     {

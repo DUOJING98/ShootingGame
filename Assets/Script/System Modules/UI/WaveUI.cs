@@ -7,7 +7,10 @@ public class WaveUI : MonoBehaviour
 
     private void Awake()
     {
-        GetComponent<Canvas>().worldCamera = Camera.main;
+        if (TryGetComponent<Canvas>(out Canvas canvas))
+        {
+            canvas.worldCamera = Camera.main;
+        }
         waveUI = GetComponentInChildren<Text>();
     }
 

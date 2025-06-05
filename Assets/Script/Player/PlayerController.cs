@@ -108,12 +108,46 @@ public class PlayerController : Chara
         base.ResHealth(value);
         statsBar_HUD.UpdateStats(Health, maxHealth);
     }
-
+    #region DIE
     public override void Die()
     {
         statsBar_HUD.UpdateStats(0f, maxHealth);
-        base.Die();
+        
+        AudioManager.instance.PlayRandomSFX(deathSFX);
+        PoolManager.Release(deathVFX, transform.position);
+        
+        
+        foreach (var r in GetComponentsInChildren<Renderer>())
+        {
+            r.enabled = false;
+        }
+        GetComponent<Collider2D>().enabled = false;
+       
+        StartCoroutine(DelayedGameOver());
     }
+
+    IEnumerator DelayedGameOver()
+    {
+        Debug.Log("玩家死亡，开始延迟...");
+        yield return new WaitForSecondsRealtime(3f);
+        Debug.Log("调用 GameOverManager");
+
+        GameOverManager.Instance?.ShowGameOver();
+
+        yield return new WaitForSecondsRealtime(0.1f); 
+
+        gameObject.SetActive(false); 
+
+    }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Die();
+        }
+    }
+
+    #endregion
     #region MOVE
     private void Move(Vector2 moveInput)
     {

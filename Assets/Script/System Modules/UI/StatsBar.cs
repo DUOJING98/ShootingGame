@@ -21,8 +21,10 @@ public class StatsBar : MonoBehaviour
 
     private void Awake()
     {
-        canvas = GetComponent<Canvas>();
-        canvas.worldCamera = Camera.main;
+        if (TryGetComponent<Canvas>(out Canvas canvas))
+        {
+            canvas.worldCamera = Camera.main;
+        }
         waitForDelayFill = new WaitForSeconds(fillDelay);
     }
 
@@ -50,7 +52,10 @@ public class StatsBar : MonoBehaviour
         if (currentFillAmount > targetFillAmount)
         {
             fillImageFront.fillAmount = targetFillAmount;
-            bufferedFillingCoroutine = StartCoroutine(BufferedFillingCoroutine(fillImageBack));
+            if (gameObject.activeInHierarchy && this.isActiveAndEnabled)
+            {
+                bufferedFillingCoroutine = StartCoroutine(BufferedFillingCoroutine(fillImageBack));
+            }
 
             return;
         }
@@ -58,7 +63,10 @@ public class StatsBar : MonoBehaviour
         if (currentFillAmount < targetFillAmount)
         {
             fillImageBack.fillAmount = targetFillAmount;
-            bufferedFillingCoroutine = StartCoroutine(BufferedFillingCoroutine(fillImageFront));
+            if (gameObject.activeInHierarchy && this.isActiveAndEnabled)
+            {
+                bufferedFillingCoroutine = StartCoroutine(BufferedFillingCoroutine(fillImageFront));
+            }
         }
     }
 

@@ -1,10 +1,8 @@
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.Playables;
 [CreateAssetMenu(menuName = "Player Input")]
-public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
+public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions, InputSystem_Actions.IPauseMenuActions
 {
     InputSystem_Actions inputActions;
 
@@ -16,28 +14,50 @@ public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
 
     public event UnityAction onDodge = delegate { };
 
+    public event UnityAction onPause = delegate { };
+    public event UnityAction onUnPause = delegate { };
+
+
     private void OnEnable()
     {
         inputActions = new InputSystem_Actions();
         inputActions.Player.SetCallbacks(this);
+        inputActions.PauseMenu.SetCallbacks(this);
     }
 
-    public void EnablePlayerInput()
+    void SwitchActionMap(InputActionMap actionMap, bool isUI)
     {
-        inputActions.Player.Enable();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        inputActions.Disable();
+        actionMap.Enable();
+
+        if (isUI)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
+    public void SwitchToDynamicUpdateMode() => InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInDynamicUpdate;
+    public void SwitchToFixedUpdateMode() => InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInFixedUpdate;
+    public void EnablePlayerInput() => SwitchActionMap(inputActions.Player, false);
+
+    public void EnablePauseInput() => SwitchActionMap(inputActions.PauseMenu, true);
     public void DisableAllInput()
     {
-        inputActions.Player.Disable();
+        inputActions.Disable();
     }
 
     private void OnDisable()
     {
         DisableAllInput();
     }
+
+
 
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -69,6 +89,8 @@ public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
         }
     }
 
+
+
     public void OnLook(InputAction.CallbackContext context)
     {
     }
@@ -87,6 +109,7 @@ public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
         }
     }
 
+
     public void OnNext(InputAction.CallbackContext context)
     {
     }
@@ -97,5 +120,20 @@ public class PlayerInput : ScriptableObject, InputSystem_Actions.IPlayerActions
 
     public void OnSprint(InputAction.CallbackContext context)
     {
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            onPause.Invoke();
+        }
+    }
+    public void OnUnPause(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            onUnPause.Invoke();
+        }
     }
 }
